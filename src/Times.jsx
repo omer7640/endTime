@@ -1,7 +1,24 @@
 import React, { useState, useEffect } from "react";
-import Countdown from "./Countdown";
 export default function Times({ endTime }) {
-  const { days, hours, minutes, seconds } = Countdown(endTime);
+  const [days, setDays] = useState("0");
+  const [hours, setHours] = useState("0");
+  const [minutes, setMinutes] = useState("0");
+  const [seconds, setSeconds] = useState("0");
+  const [time, setTime] = useState("0");
+
+  function getTime() {
+    const timeTemp = Date.parse(endTime) - Date.now();
+    setTime(timeTemp);
+    setDays(Math.floor(timeTemp / (1000 * 60 * 60 * 24)));
+    setHours(Math.floor((timeTemp / (1000 * 60 * 60)) % 24));
+    setMinutes(Math.floor((timeTemp / 1000 / 60) % 60));
+    setSeconds(Math.floor((timeTemp / 1000) % 60));
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => getTime(endTime), 1000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div>
       <div className="container">
